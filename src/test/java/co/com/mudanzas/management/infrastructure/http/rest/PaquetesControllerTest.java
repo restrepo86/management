@@ -6,8 +6,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.io.File;
+import org.springframework.web.multipart.MultipartFile;
 
 @SpringBootTest
 public class PaquetesControllerTest {
@@ -18,7 +17,7 @@ public class PaquetesControllerTest {
     @Mock
     private PaquetesService paquetesService;
 
-    private File archivoDetalleTrabajo;
+    private MultipartFile archivoDetalleTrabajo;
 
 
     @Test

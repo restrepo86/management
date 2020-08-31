@@ -2,15 +2,18 @@ package co.com.mudanzas.management.domain.services;
 
 import co.com.mudanzas.management.domain.ArchivoDetalle.ArchivoDetalleTrabajo;
 import co.com.mudanzas.management.domain.Paquetes.Paquetes;
+import co.com.mudanzas.management.domain.model.DetalleDatosCargados;
 import co.com.mudanzas.management.domain.validations.ValidationesArchivo;
-import co.com.mudanzas.management.infraestructura.data.services.DetalleEmpaqueService;
+import co.com.mudanzas.management.exceptions.InvalidFileException;
+import co.com.mudanzas.management.infrastructure.data.services.DetalleEmpaqueService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -36,40 +39,44 @@ public class PaquetesServiceTest {
     @Mock
     private DetalleEmpaqueService detalleEmpaqueService;
 
-    private File archivoDetalle;
+    private MultipartFile archivoDetalle;
     private List<Double> valoresArchivo;
     private List<String> salidaPaquetesPorDia;
+    private DetalleDatosCargados detalleDatosCargados;
 
     @BeforeEach
     public void inicializarDatos() {
         valoresArchivo = Arrays.asList(1d, 2d, 6d);
         salidaPaquetesPorDia = Arrays.asList("Case #1: 2", "Case #2: 3", "Case #3: 4");
+
+        detalleDatosCargados = new DetalleDatosCargados();
+        detalleDatosCargados.setElementosDiarios(new ArrayList<>());
     }
 
     @Test
-    public void debeAlmacenarPaquetesEnBolsasYCargarArchivo() {
+    public void debeAlmacenarPaquetesEnBolsasYCargarArchivo() throws InvalidFileException {
         paquetesService.almacenarEnBolsas(archivoDetalle);
         verify(archivoDetalleTrabajo).cargar(archivoDetalle);
     }
 
     @Test
-    public void debeValidarDatosArchivo() {
-        when(archivoDetalleTrabajo.cargar(archivoDetalle)).thenReturn(valoresArchivo);
+    public void debeValidarDatosArchivo() throws InvalidFileException {
+        when(archivoDetalleTrabajo.cargar(archivoDetalle)).thenReturn(detalleDatosCargados);
         paquetesService.almacenarEnBolsas(archivoDetalle);
-        verify(validacionesArchivo).ejecutar(valoresArchivo);
+        verify(validacionesArchivo).ejecutar(detalleDatosCargados);
     }
 
     @Test
-    public void debeEmpacarElementosEnBolsas() {
-        when(archivoDetalleTrabajo.cargar(archivoDetalle)).thenReturn(valoresArchivo);
+    public void debeEmpacarElementosEnBolsas() throws InvalidFileException {
+        when(archivoDetalleTrabajo.cargar(archivoDetalle)).thenReturn(detalleDatosCargados);
         paquetesService.almacenarEnBolsas(archivoDetalle);
-        verify(paquetes).almacenar(valoresArchivo);
+        verify(paquetes).almacenar(detalleDatosCargados);
     }
 
     @Test
-    public void debeDejarTrazaDelProcesoDeEmpaqueEnBaseDeDatos() {
-        when(archivoDetalleTrabajo.cargar(archivoDetalle)).thenReturn(valoresArchivo);
-        when(paquetes.almacenar(valoresArchivo)).thenReturn(salidaPaquetesPorDia);
+    public void debeDejarTrazaDelProcesoDeEmpaqueEnBaseDeDatos() throws InvalidFileException {
+        when(archivoDetalleTrabajo.cargar(archivoDetalle)).thenReturn(detalleDatosCargados);
+        when(paquetes.almacenar(detalleDatosCargados)).thenReturn(salidaPaquetesPorDia);
         paquetesService.almacenarEnBolsas(archivoDetalle);
         verify(detalleEmpaqueService).guardar(salidaPaquetesPorDia);
     }

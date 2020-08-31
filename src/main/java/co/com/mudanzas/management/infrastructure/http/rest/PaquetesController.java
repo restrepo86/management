@@ -1,15 +1,15 @@
 package co.com.mudanzas.management.infrastructure.http.rest;
 
+import co.com.mudanzas.management.domain.model.DetalleDatosCargados;
 import co.com.mudanzas.management.domain.services.PaquetesService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.ws.rs.Consumes;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import java.io.File;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/paquetes")
@@ -18,11 +18,12 @@ public class PaquetesController {
     @Autowired
     private PaquetesService paquetesService;
 
-    @PostMapping("/almacenar")
-    @Consumes(MediaType.APPLICATION_OCTET_STREAM)
-    @Produces(MediaType.APPLICATION_JSON)
-    public void almacenarEnBolsas(File archivoDetalleTrabajo) {
-        paquetesService.almacenarEnBolsas(archivoDetalleTrabajo);
+    @PostMapping(
+            value = "/almacenar",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody DetalleDatosCargados almacenarEnBolsas(@RequestParam MultipartFile archivoDetalleTrabajo) {
+        return paquetesService.almacenarEnBolsas(archivoDetalleTrabajo);
     }
 
 }

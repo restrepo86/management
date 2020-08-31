@@ -1,4 +1,4 @@
-package co.com.mudanzas.management.infraestructura.data.services;
+package co.com.mudanzas.management.infrastructure.data.services;
 
 import org.springframework.stereotype.Service;
 

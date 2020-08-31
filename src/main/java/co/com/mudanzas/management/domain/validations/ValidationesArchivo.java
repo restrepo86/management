@@ -1,13 +1,12 @@
 package co.com.mudanzas.management.domain.validations;
 
+import co.com.mudanzas.management.domain.model.DetalleDatosCargados;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class ValidationesArchivo {
 
-    public void ejecutar(List<Double> valoresArchivo) {
+    public void ejecutar(DetalleDatosCargados detalleDatosCargados) {
 
     }
 
