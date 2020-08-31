@@ -1,7 +1,7 @@
 package co.com.mudanzas.management.domain.validations;
 
 import co.com.mudanzas.management.domain.model.DetalleDatosCargados;
-import co.com.mudanzas.management.exceptions.DayOfWorkException;
+import co.com.mudanzas.management.exceptions.ValidationsFileException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -21,6 +21,9 @@ public class ValidationesArchivoTest {
     @Mock
     private DiasTrabajo diasTrabajo;
 
+    @Mock
+    private CantidadElementosDia cantidadElementosDia;
+
     private DetalleDatosCargados detalleDatosCargados;
 
     @BeforeEach
@@ -30,9 +33,15 @@ public class ValidationesArchivoTest {
     }
 
     @Test
-    public void debeValidarNumeroDeDiasATrabajar() throws DayOfWorkException {
+    public void debeValidarNumeroDeDiasATrabajar() throws ValidationsFileException {
         validationesArchivo.ejecutar(detalleDatosCargados);
         verify(diasTrabajo).validar(detalleDatosCargados);
+    }
+
+    @Test
+    public void debeValidarCantidadDeElementosDiarios() throws ValidationsFileException {
+        validationesArchivo.ejecutar(detalleDatosCargados);
+        verify(cantidadElementosDia).validar(detalleDatosCargados);
     }
 
 }

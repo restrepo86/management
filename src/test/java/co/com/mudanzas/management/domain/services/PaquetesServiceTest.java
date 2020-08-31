@@ -4,8 +4,8 @@ import co.com.mudanzas.management.domain.ArchivoDetalle.ArchivoDetalleTrabajo;
 import co.com.mudanzas.management.domain.Paquetes.Paquetes;
 import co.com.mudanzas.management.domain.model.DetalleDatosCargados;
 import co.com.mudanzas.management.domain.validations.ValidationesArchivo;
-import co.com.mudanzas.management.exceptions.DayOfWorkException;
 import co.com.mudanzas.management.exceptions.InvalidFileException;
+import co.com.mudanzas.management.exceptions.ValidationsFileException;
 import co.com.mudanzas.management.infrastructure.data.services.DetalleEmpaqueService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -61,7 +61,7 @@ public class PaquetesServiceTest {
     }
 
     @Test
-    public void debeValidarDatosArchivo() throws InvalidFileException, DayOfWorkException {
+    public void debeValidarDatosArchivo() throws InvalidFileException, ValidationsFileException {
         when(archivoDetalleTrabajo.cargar(archivoDetalle)).thenReturn(detalleDatosCargados);
         paquetesService.almacenarEnBolsas(archivoDetalle);
         verify(validacionesArchivo).ejecutar(detalleDatosCargados);
