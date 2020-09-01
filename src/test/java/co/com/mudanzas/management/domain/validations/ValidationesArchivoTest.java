@@ -24,6 +24,9 @@ public class ValidationesArchivoTest {
     @Mock
     private CantidadElementosDia cantidadElementosDia;
 
+    @Mock
+    private PesoElementos pesoElementos;
+
     private DetalleDatosCargados detalleDatosCargados;
 
     @BeforeEach
@@ -42,6 +45,12 @@ public class ValidationesArchivoTest {
     public void debeValidarCantidadDeElementosDiarios() throws ValidationsFileException {
         validationesArchivo.ejecutar(detalleDatosCargados);
         verify(cantidadElementosDia).validar(detalleDatosCargados);
+    }
+
+    @Test
+    public void debeValidarPesoElementos() throws ValidationsFileException {
+        validationesArchivo.ejecutar(detalleDatosCargados);
+        verify(pesoElementos).validar(detalleDatosCargados);
     }
 
 }

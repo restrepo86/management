@@ -5,6 +5,7 @@ import co.com.mudanzas.management.domain.Paquetes.Paquetes;
 import co.com.mudanzas.management.domain.model.DetalleDatosCargados;
 import co.com.mudanzas.management.domain.validations.ValidationesArchivo;
 import co.com.mudanzas.management.exceptions.InvalidFileException;
+import co.com.mudanzas.management.exceptions.ManagementException;
 import co.com.mudanzas.management.exceptions.ValidationsFileException;
 import co.com.mudanzas.management.infrastructure.data.services.DetalleEmpaqueService;
 import org.slf4j.Logger;
@@ -43,6 +44,8 @@ public class PaquetesService {
             LOG.error(invalidFileException.getMessage());
         } catch (ValidationsFileException validationsFileException) {
             LOG.error(validationsFileException.getMessage());
+        } catch (ManagementException managementException) {
+            LOG.error(managementException.getMessage());
         }
         return detalleDatosCargados;
     }

@@ -3,6 +3,8 @@ package co.com.mudanzas.management.domain.contants;
 public final class Errores {
 
     public static final String EL_NUMERO_DE_ELEMENTOS_PARA_MOVER_DIARIO_DEBE_SER_MINIMO_UNO_Y_MAXIMO_CIEN = "El n\u00famero de elementos para mover diario, debe ser m\u00ednimo uno y m\u00e1ximo cien";
+    public static final String EL_PESO_DE_CADA_UNO_DE_LOS_ELEMENTOS_DEBE_SER_MINIMO_UNO_Y_MAXIMO_CIEN = "El peso de cada uno de los elementos debe ser m\u00ednimo uno y m\u00e1ximo cien";
+    public static final String LA_SUMA_DE_LOS_PESOS_POR_DIA_NO_PUEDE_SER_MENOR_A_CINCUENTA_LIBRAS = "La suma de los pesos por dia no puede ser menor a cincuenta libras";
 
     private Errores() {
         super();
