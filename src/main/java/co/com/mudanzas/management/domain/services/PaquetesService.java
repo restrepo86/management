@@ -27,11 +27,11 @@ public class PaquetesService {
     @Autowired
     private DetalleEmpaqueService detalleEmpaqueService;
 
-    public DetalleDatosCargados almacenarEnBolsas(MultipartFile archivoDetalle) throws ManagementException {
+    public List<String> almacenarEnBolsas(MultipartFile archivoDetalle) throws ManagementException {
         DetalleDatosCargados detalleDatosCargados = archivoDetalleTrabajo.cargar(archivoDetalle);
         validacionesArchivo.ejecutar(detalleDatosCargados);
         List<String> bolsasPorDia = paquetes.almacenar(detalleDatosCargados);
         detalleEmpaqueService.guardar(bolsasPorDia);
-        return detalleDatosCargados;
+        return bolsasPorDia;
     }
 }

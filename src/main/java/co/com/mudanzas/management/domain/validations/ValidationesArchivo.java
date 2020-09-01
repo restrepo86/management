@@ -25,13 +25,8 @@ public class ValidationesArchivo {
     public void ejecutar(DetalleDatosCargados detalleDatosCargados) throws ValidationsFileException {
 
         List<IValidacionesArchivo> iValidacionesArchivo = construirValidadores();
-
-        try {
-            for (IValidacionesArchivo validacionArchivo: iValidacionesArchivo) {
-                validacionArchivo.validar(detalleDatosCargados);
-            }
-        } catch (ValidationsFileException validationsFileException) {
-            throw validationsFileException;
+        for (IValidacionesArchivo validacionArchivo: iValidacionesArchivo) {
+            validacionArchivo.validar(detalleDatosCargados);
         }
 
     }
