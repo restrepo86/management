@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/paquetes")
 public class PaquetesController {
@@ -27,7 +25,7 @@ public class PaquetesController {
             value = "/almacenar",
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody List<String> almacenarEnBolsas(
+    public @ResponseBody byte[] almacenarEnBolsas(
             @RequestParam MultipartFile archivoDetalleTrabajo,
             @RequestParam String cedulaParticipante
     ) {

@@ -1,6 +1,7 @@
 package co.com.mudanzas.management.domain.services;
 
 import co.com.mudanzas.management.domain.ArchivoDetalle.ArchivoDetalleTrabajo;
+import co.com.mudanzas.management.domain.ArchivoDetalle.ArchivoRespuesta;
 import co.com.mudanzas.management.domain.Paquetes.Paquetes;
 import co.com.mudanzas.management.domain.model.DatosEntrada;
 import co.com.mudanzas.management.domain.model.DetalleDatosCargados;
@@ -38,6 +39,9 @@ public class PaquetesServiceTest {
 
     @Mock
     private DetalleEmpaqueService detalleEmpaqueService;
+
+    @Mock
+    private ArchivoRespuesta archivoRespuesta;
 
     private DatosEntrada datosEntrada;
     private List<Double> valoresArchivo;
@@ -81,6 +85,15 @@ public class PaquetesServiceTest {
         when(paquetes.almacenar(detalleDatosCargados)).thenReturn(salidaPaquetesPorDia);
         paquetesService.almacenarEnBolsas(datosEntrada);
         verify(detalleEmpaqueService).guardar(detalleDatosCargados, salidaPaquetesPorDia, datosEntrada.getCedulaParticipante());
+    }
+
+    @Test
+    public void debeConstruirArchivoDeRespuesta() throws ManagementException {
+        when(archivoDetalleTrabajo.cargar(datosEntrada.getArchivoDetalleTrabajo())).thenReturn(detalleDatosCargados);
+        when(paquetes.almacenar(detalleDatosCargados)).thenReturn(salidaPaquetesPorDia);
+        paquetesService.almacenarEnBolsas(datosEntrada);
+        verify(detalleEmpaqueService).guardar(detalleDatosCargados, salidaPaquetesPorDia, datosEntrada.getCedulaParticipante());
+        verify(archivoRespuesta).contruir(salidaPaquetesPorDia);
     }
 
 }
