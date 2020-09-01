@@ -2,6 +2,7 @@ package co.com.mudanzas.management.domain.services;
 
 import co.com.mudanzas.management.domain.ArchivoDetalle.ArchivoDetalleTrabajo;
 import co.com.mudanzas.management.domain.Paquetes.Paquetes;
+import co.com.mudanzas.management.domain.model.DatosEntrada;
 import co.com.mudanzas.management.domain.model.DetalleDatosCargados;
 import co.com.mudanzas.management.domain.validations.ValidationesArchivo;
 import co.com.mudanzas.management.exceptions.ManagementException;
@@ -11,7 +12,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -39,7 +39,7 @@ public class PaquetesServiceTest {
     @Mock
     private DetalleEmpaqueService detalleEmpaqueService;
 
-    private MultipartFile archivoDetalle;
+    private DatosEntrada datosEntrada;
     private List<Double> valoresArchivo;
     private List<String> salidaPaquetesPorDia;
     private DetalleDatosCargados detalleDatosCargados;
@@ -51,34 +51,36 @@ public class PaquetesServiceTest {
 
         detalleDatosCargados = new DetalleDatosCargados();
         detalleDatosCargados.setElementosDiarios(new ArrayList<>());
+
+        datosEntrada = new DatosEntrada();
     }
 
     @Test
     public void debeAlmacenarPaquetesEnBolsasYCargarArchivo() throws ManagementException {
-        paquetesService.almacenarEnBolsas(archivoDetalle);
-        verify(archivoDetalleTrabajo).cargar(archivoDetalle);
+        paquetesService.almacenarEnBolsas(datosEntrada);
+        verify(archivoDetalleTrabajo).cargar(datosEntrada.getArchivoDetalleTrabajo());
     }
 
     @Test
     public void debeValidarDatosArchivo() throws ManagementException {
-        when(archivoDetalleTrabajo.cargar(archivoDetalle)).thenReturn(detalleDatosCargados);
-        paquetesService.almacenarEnBolsas(archivoDetalle);
+        when(archivoDetalleTrabajo.cargar(datosEntrada.getArchivoDetalleTrabajo())).thenReturn(detalleDatosCargados);
+        paquetesService.almacenarEnBolsas(datosEntrada);
         verify(validacionesArchivo).ejecutar(detalleDatosCargados);
     }
 
     @Test
     public void debeEmpacarElementosEnBolsas() throws ManagementException {
-        when(archivoDetalleTrabajo.cargar(archivoDetalle)).thenReturn(detalleDatosCargados);
-        paquetesService.almacenarEnBolsas(archivoDetalle);
+        when(archivoDetalleTrabajo.cargar(datosEntrada.getArchivoDetalleTrabajo())).thenReturn(detalleDatosCargados);
+        paquetesService.almacenarEnBolsas(datosEntrada);
         verify(paquetes).almacenar(detalleDatosCargados);
     }
 
     @Test
     public void debeDejarTrazaDelProcesoDeEmpaqueEnBaseDeDatos() throws ManagementException {
-        when(archivoDetalleTrabajo.cargar(archivoDetalle)).thenReturn(detalleDatosCargados);
+        when(archivoDetalleTrabajo.cargar(datosEntrada.getArchivoDetalleTrabajo())).thenReturn(detalleDatosCargados);
         when(paquetes.almacenar(detalleDatosCargados)).thenReturn(salidaPaquetesPorDia);
-        paquetesService.almacenarEnBolsas(archivoDetalle);
-        verify(detalleEmpaqueService).guardar(salidaPaquetesPorDia);
+        paquetesService.almacenarEnBolsas(datosEntrada);
+        verify(detalleEmpaqueService).guardar(detalleDatosCargados, salidaPaquetesPorDia, datosEntrada.getCedulaParticipante());
     }
 
 }

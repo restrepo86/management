@@ -2,13 +2,13 @@ package co.com.mudanzas.management.domain.services;
 
 import co.com.mudanzas.management.domain.ArchivoDetalle.ArchivoDetalleTrabajo;
 import co.com.mudanzas.management.domain.Paquetes.Paquetes;
+import co.com.mudanzas.management.domain.model.DatosEntrada;
 import co.com.mudanzas.management.domain.model.DetalleDatosCargados;
 import co.com.mudanzas.management.domain.validations.ValidationesArchivo;
 import co.com.mudanzas.management.exceptions.ManagementException;
 import co.com.mudanzas.management.infrastructure.data.services.DetalleEmpaqueService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -27,11 +27,11 @@ public class PaquetesService {
     @Autowired
     private DetalleEmpaqueService detalleEmpaqueService;
 
-    public List<String> almacenarEnBolsas(MultipartFile archivoDetalle) throws ManagementException {
-        DetalleDatosCargados detalleDatosCargados = archivoDetalleTrabajo.cargar(archivoDetalle);
+    public List<String> almacenarEnBolsas(DatosEntrada datosEntrada) throws ManagementException {
+        DetalleDatosCargados detalleDatosCargados = archivoDetalleTrabajo.cargar(datosEntrada.getArchivoDetalleTrabajo());
         validacionesArchivo.ejecutar(detalleDatosCargados);
         List<String> bolsasPorDia = paquetes.almacenar(detalleDatosCargados);
-        detalleEmpaqueService.guardar(bolsasPorDia);
+        detalleEmpaqueService.guardar(detalleDatosCargados, bolsasPorDia, datosEntrada.getCedulaParticipante());
         return bolsasPorDia;
     }
 }

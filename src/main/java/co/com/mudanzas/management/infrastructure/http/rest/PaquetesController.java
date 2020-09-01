@@ -1,5 +1,6 @@
 package co.com.mudanzas.management.infrastructure.http.rest;
 
+import co.com.mudanzas.management.domain.model.DatosEntrada;
 import co.com.mudanzas.management.domain.services.PaquetesService;
 import co.com.mudanzas.management.exceptions.ManagementException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +27,12 @@ public class PaquetesController {
             value = "/almacenar",
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody List<String> almacenarEnBolsas(@RequestParam MultipartFile archivoDetalleTrabajo) {
+    public @ResponseBody List<String> almacenarEnBolsas(
+            @RequestParam MultipartFile archivoDetalleTrabajo,
+            @RequestParam String cedulaParticipante
+    ) {
         try {
-            return paquetesService.almacenarEnBolsas(archivoDetalleTrabajo);
+            return paquetesService.almacenarEnBolsas(new DatosEntrada(cedulaParticipante, archivoDetalleTrabajo));
         } catch (ManagementException managementException) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, managementException.getMessage());
         }
