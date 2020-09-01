@@ -1,6 +1,7 @@
 package co.com.mudanzas.management.infrastructure.http.rest;
 
 import co.com.mudanzas.management.domain.services.PaquetesService;
+import co.com.mudanzas.management.exceptions.ManagementException;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -21,7 +22,7 @@ public class PaquetesControllerTest {
 
 
     @Test
-    public void debePermitirCargarDetalleDeTrabajoDiarioYDividirloEnPaquetes() {
+    public void debePermitirCargarDetalleDeTrabajoDiarioYDividirloEnPaquetes() throws ManagementException {
         paquetesController.almacenarEnBolsas(archivoDetalleTrabajo);
         Mockito.verify(paquetesService).almacenarEnBolsas(archivoDetalleTrabajo);
     }

@@ -4,9 +4,7 @@ import co.com.mudanzas.management.domain.ArchivoDetalle.ArchivoDetalleTrabajo;
 import co.com.mudanzas.management.domain.Paquetes.Paquetes;
 import co.com.mudanzas.management.domain.model.DetalleDatosCargados;
 import co.com.mudanzas.management.domain.validations.ValidationesArchivo;
-import co.com.mudanzas.management.exceptions.InvalidFileException;
 import co.com.mudanzas.management.exceptions.ManagementException;
-import co.com.mudanzas.management.exceptions.ValidationsFileException;
 import co.com.mudanzas.management.infrastructure.data.services.DetalleEmpaqueService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,20 +31,13 @@ public class PaquetesService {
     @Autowired
     private DetalleEmpaqueService detalleEmpaqueService;
 
-    public DetalleDatosCargados almacenarEnBolsas(MultipartFile archivoDetalle) {
+    public DetalleDatosCargados almacenarEnBolsas(MultipartFile archivoDetalle) throws ManagementException {
         DetalleDatosCargados detalleDatosCargados = null;
-        try {
-            detalleDatosCargados = archivoDetalleTrabajo.cargar(archivoDetalle);
-            validacionesArchivo.ejecutar(detalleDatosCargados);
-            List<String> bolsasPorDia = paquetes.almacenar(detalleDatosCargados);
-            detalleEmpaqueService.guardar(bolsasPorDia);
-        } catch (InvalidFileException invalidFileException) {
-            LOG.error(invalidFileException.getMessage());
-        } catch (ValidationsFileException validationsFileException) {
-            LOG.error(validationsFileException.getMessage());
-        } catch (ManagementException managementException) {
-            LOG.error(managementException.getMessage());
-        }
+        detalleDatosCargados = archivoDetalleTrabajo.cargar(archivoDetalle);
+        validacionesArchivo.ejecutar(detalleDatosCargados);
+        List<String> bolsasPorDia = paquetes.almacenar(detalleDatosCargados);
+        detalleEmpaqueService.guardar(bolsasPorDia);
+
         return detalleDatosCargados;
     }
 }

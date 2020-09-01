@@ -18,6 +18,9 @@ public class CantidadElementosDia implements IValidacionesArchivo {
                 .isPresent();
         if (tieneElementosPorFueraDelRango) {
             throw new ItemsSizeDailyException(Errores.EL_NUMERO_DE_ELEMENTOS_PARA_MOVER_DIARIO_DEBE_SER_MINIMO_UNO_Y_MAXIMO_CIEN);
+        } else if (detalleDatosCargados.getDiasATrabajar() != detalleDatosCargados.getElementosDiarios().size()) {
+            throw new ItemsSizeDailyException(
+                    Errores.TODOS_LOS_DIAS_DEBEN_TENER_SU_RESPECTIVA_ASIGNACION_DE_ELEMENTOS_DIARIOS_A_MOVER_POR_EL_TRABAJADOR);
         }
     }
 

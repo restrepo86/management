@@ -4,8 +4,7 @@ import co.com.mudanzas.management.domain.ArchivoDetalle.ArchivoDetalleTrabajo;
 import co.com.mudanzas.management.domain.Paquetes.Paquetes;
 import co.com.mudanzas.management.domain.model.DetalleDatosCargados;
 import co.com.mudanzas.management.domain.validations.ValidationesArchivo;
-import co.com.mudanzas.management.exceptions.InvalidFileException;
-import co.com.mudanzas.management.exceptions.ValidationsFileException;
+import co.com.mudanzas.management.exceptions.ManagementException;
 import co.com.mudanzas.management.infrastructure.data.services.DetalleEmpaqueService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -55,27 +54,27 @@ public class PaquetesServiceTest {
     }
 
     @Test
-    public void debeAlmacenarPaquetesEnBolsasYCargarArchivo() throws InvalidFileException {
+    public void debeAlmacenarPaquetesEnBolsasYCargarArchivo() throws ManagementException {
         paquetesService.almacenarEnBolsas(archivoDetalle);
         verify(archivoDetalleTrabajo).cargar(archivoDetalle);
     }
 
     @Test
-    public void debeValidarDatosArchivo() throws InvalidFileException, ValidationsFileException {
+    public void debeValidarDatosArchivo() throws ManagementException {
         when(archivoDetalleTrabajo.cargar(archivoDetalle)).thenReturn(detalleDatosCargados);
         paquetesService.almacenarEnBolsas(archivoDetalle);
         verify(validacionesArchivo).ejecutar(detalleDatosCargados);
     }
 
     @Test
-    public void debeEmpacarElementosEnBolsas() throws InvalidFileException {
+    public void debeEmpacarElementosEnBolsas() throws ManagementException {
         when(archivoDetalleTrabajo.cargar(archivoDetalle)).thenReturn(detalleDatosCargados);
         paquetesService.almacenarEnBolsas(archivoDetalle);
         verify(paquetes).almacenar(detalleDatosCargados);
     }
 
     @Test
-    public void debeDejarTrazaDelProcesoDeEmpaqueEnBaseDeDatos() throws InvalidFileException {
+    public void debeDejarTrazaDelProcesoDeEmpaqueEnBaseDeDatos() throws ManagementException {
         when(archivoDetalleTrabajo.cargar(archivoDetalle)).thenReturn(detalleDatosCargados);
         when(paquetes.almacenar(detalleDatosCargados)).thenReturn(salidaPaquetesPorDia);
         paquetesService.almacenarEnBolsas(archivoDetalle);
